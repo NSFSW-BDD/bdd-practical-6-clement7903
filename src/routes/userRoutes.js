@@ -4,7 +4,7 @@ const router = express.Router();
 const controller = require('../controllers/userController');
 
 //create your routes eg router.get('/', controller.readAllUser);
-router.get("/", controller.getAllUser)
+router.get("/", jwtMiddleware.verifyToken, jwtMiddleware.verifyAdmin, controller.getAllUser)
 router.post("/", controller.createNewUser)
 router.get("/:userid", controller.getUserById)
 router.put("/:userid", controller.updateUserById)
