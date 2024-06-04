@@ -10,7 +10,8 @@ var userModel = {
     selectUserById: (data, callback) => {
 
         const SQLSTATMENT = ` SELECT * FROM user WHERE userid = ?; `;
-        const VALUES = [data.userid]; 
+        const VALUES = [data.userid];
+        console.log("Querying DB at selectUserById")
         pool.query(SQLSTATMENT, VALUES, callback);
 
     },
@@ -18,7 +19,7 @@ var userModel = {
     insertNewUser: (data, callback) => {
 
         const SQLSTATMENT = ` INSERT INTO user (username, email,role,password) VALUES (?,?,?,?); `;
-        const VALUES = [data.username, data.email,data.role,data.password];
+        const VALUES = [data.username, data.email, data.role, data.password];
         pool.query(SQLSTATMENT, VALUES, callback);
 
     },
@@ -35,10 +36,19 @@ var userModel = {
         pool.query(SQLSTATMENT, VALUES, callback);
 
     },
-    
+
     loginUser: (data, callback) => {
         const SQLSTATMENT = ` SELECT * FROM user WHERE email = ? and password=? `;
         const VALUES = [data.email, data.password];
+        pool.query(SQLSTATMENT, VALUES, callback);
+
+    },
+
+    selectUserByUsernameOrEmail: (data, callback) => {
+        const SQLSTATMENT = ` SELECT * FROM user WHERE email = ? or username=? `;
+        console.log("here")
+        const VALUES = [data.email, data.username];
+        console.log("Querying DB at selectUserByUsernameOrEmail")
         pool.query(SQLSTATMENT, VALUES, callback);
 
     }

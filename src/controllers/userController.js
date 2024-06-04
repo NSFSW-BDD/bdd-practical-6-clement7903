@@ -25,7 +25,7 @@ var userController = {
             } else {
                 if (results.length == 0) {
                     res.status(404).json({
-                        message: "User not found"
+                        message: "User not found when doing getUserById"
                     });
                 }
                 else res.status(200).json(results[0]);
@@ -101,7 +101,7 @@ var userController = {
 
         model.deleteUserById(data, callback);
     },
-    
+
     loginUser: (req, res, next) => {
         const data = {
             email: req.body.email,
@@ -121,8 +121,7 @@ var userController = {
                         message: "User not found"
                     });
                 }
-                else 
-                {
+                else {
                     res.locals.userid = results[0].userid
                     res.locals.role = results[0].role;
                     next()
@@ -130,6 +129,40 @@ var userController = {
             }
         }
         model.loginUser(data, callback);
+    },
+
+    checkUsernameOrEmailExist: (req, res, next) => {
+        const data = {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password
+        }
+
+        console.log("Checking if username/email exists: ", data.username, data.email)
+
+        const callback = (error, results, fields) => {
+            if (error) {
+                console.error("Error checkUsernameOrEmailExist:", error);
+                res.status(500).json(error);
+            } else {
+                if (results.length == 0) {
+                    console.log(data.username)
+                    console.log(data.email)
+
+
+                    res.status(404).json({
+                        message: "User not found when doing checkUsernameOrEmailExist"
+                    });
+                }
+                else {
+                    res.locals.username = results[0].username
+                    res.locals.email = results[0].email;
+                    // next()
+                    res.status(200).json(results);
+                }
+            }
+        }
+        model.selectUserByUsernameOrEmail(data, callback);
     }
 
 }
