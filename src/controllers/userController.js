@@ -124,6 +124,8 @@ var userController = {
                 else {
                     res.locals.userid = results[0].userid
                     res.locals.role = results[0].role;
+                    res.locals.email = results[0].email;
+                    res.locals.hash = results[0].password;
                     next()
                 }
             }

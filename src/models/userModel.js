@@ -38,8 +38,8 @@ var userModel = {
     },
 
     loginUser: (data, callback) => {
-        const SQLSTATMENT = ` SELECT * FROM user WHERE email = ? and password=? `;
-        const VALUES = [data.email, data.password];
+        const SQLSTATMENT = ` SELECT * FROM user WHERE email = ? `;
+        const VALUES = [data.email];
         pool.query(SQLSTATMENT, VALUES, callback);
 
     },

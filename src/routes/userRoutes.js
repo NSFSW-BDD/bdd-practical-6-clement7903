@@ -10,7 +10,7 @@ router.post("/", controller.createNewUser)
 router.get("/:userid", controller.getUserById)
 router.put("/:userid", controller.updateUserById)
 router.delete("/:userid", controller.deleteUserById)
-router.post("/login", controller.loginUser, jwtMiddleware.generateToken, jwtMiddleware.sendToken) // use post because a jwt is being created, add in more middleware if needed (controller.loginUser, jwtMiddleware.generateToken....)
+router.post("/login", controller.loginUser, bcryptMiddleware.comparePassword, jwtMiddleware.generateToken, jwtMiddleware.sendToken) // use post because a jwt is being created, add in more middleware if needed (controller.loginUser, jwtMiddleware.generateToken....)
 
 router.post("/register", controller.checkUsernameOrEmailExist
     , bcryptMiddleware.hashPassword, controller.register
