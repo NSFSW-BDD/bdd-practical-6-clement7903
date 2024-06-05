@@ -138,6 +138,13 @@ var userController = {
             password: req.body.password
         }
 
+        if (!data.username || !data.email || !data.password) {
+            console.log(`Missing details ${data.username}, ${data.email}, ${data.password}`)
+            return res.status(400).json({
+                error: "Username, email, and password are required."
+            });
+        }
+
         console.log("Checking if username/email exists: ", data.username, data.email)
 
         const callback = (error, results, fields) => {
@@ -146,25 +153,45 @@ var userController = {
                 res.status(500).json(error);
             } else {
                 if (results.length == 0) {
-                    console.log(data.username)
-                    console.log(data.email)
-
-
-                    res.status(404).json({
-                        message: "User not found when doing checkUsernameOrEmailExist"
-                    });
+                    console.log("User not found when doing checkUsernameOrEmailExist")
+                    next()
                 }
                 else {
+                    console.log("Existing user is found")
                     res.locals.username = results[0].username
                     res.locals.email = results[0].email;
-                    // next()
                     res.status(200).json(results);
                 }
             }
         }
         model.selectUserByUsernameOrEmail(data, callback);
-    }
+    },
 
+    register: (req, res, next) => {
+        const data = {
+            username: req.body.username,
+            email: req.body.email,
+            role: req.body.role || "user",
+            password: res.locals.hash,
+        }
+
+        const callback = (error, results, fields) => {
+            if (error) {
+                console.error("Error register:", error);
+                res.status(500).json(error);
+            } else {
+                console.log(`Registering user with the following details 
+                                    Username: ${data.username}, 
+                                    Email: ${data.email}, 
+                                    Role: ${data.role}, 
+                                    Hashed Password: ${data.password}
+                                    `)
+                res.locals.message = `User ${data.username} created successfully!`
+                next()
+            }
+        }
+        model.insertNewUser(data, callback)
+    }
 }
 
 module.exports = userController;

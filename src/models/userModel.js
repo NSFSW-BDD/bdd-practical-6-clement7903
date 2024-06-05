@@ -46,7 +46,6 @@ var userModel = {
 
     selectUserByUsernameOrEmail: (data, callback) => {
         const SQLSTATMENT = ` SELECT * FROM user WHERE email = ? or username=? `;
-        console.log("here")
         const VALUES = [data.email, data.username];
         console.log("Querying DB at selectUserByUsernameOrEmail")
         pool.query(SQLSTATMENT, VALUES, callback);
